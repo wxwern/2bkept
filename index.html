@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>2bkept</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="styles/main.css" />
+    </head>
+    <body>
+        <div id="navigationBar">
+            <span><b>2bkept</b></span>
+        </div>
+        <div id="bookmarkContainer"> 
+            <div id="bookmarks">
+                <div class="bookmark">
+                    <span>
+                    This is an example of a bookmark with no links. That's about it.
+                    </span>
+                    <button class="delete">Delete</button>
+                </div>
+                <div class="bookmark">
+                    <span>
+                        Open Source - Wikipedia
+                        </br>
+                        <a href="https://en.wikipedia.org/wiki/Open_source">https://en.wikipedia.org/wiki/Open_source</a>
+                    </span>
+                    <button class="delete">Delete</button>
+                </div>
+                <div class="bookmark">
+                    <span>
+                        This is an example of a bookmark with a custom title. 
+                        </br>
+                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">https://www.youtube.com/watch?v=dQw4w9WgXcQ</a>
+                    </span>
+                    <button class="delete">Delete</button>
+                </div>
+                <div class="bookmark">
+                    <span>
+                        This is an example
+                        </br>
+                        of a custom multiline
+                        </br>
+                        bookmark title with a link.
+                        </br>
+                        </br>
+                        <a href="https://en.wikipedia.org/wiki/Bookmark">https://en.wikipedia.org/wiki/Bookmark</a>
+                    </span>
+                    <button class="delete">Delete</button>
+                </div>
+            </div>
+        </div>
+        <div id="bottomBar">
+            <textarea id="bookmarkTextArea" type="text" placeholder="Type or paste your bookmark here..."></textarea>
+            <button id="addBookmarkButton" onclick="addBookmarkHandler()">Add</button>
+        </div>
+        <script src="scripts/main.js"></script>
+    </body>
+</html>
+
+

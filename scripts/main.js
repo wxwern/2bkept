@@ -79,7 +79,7 @@ function updateUI() {
                 },
                 function () {
                     bookmarks.splice(I, 1);
-                    editingIndex = -1;
+                    if (editingIndex != -1) toggleEditing(editingIndex);
                     saveContentsToLocalStorage();
                     updateUI();
                 }

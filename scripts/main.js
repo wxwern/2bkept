@@ -8,11 +8,14 @@ var bookmarks = [
 var editingIndex = -1;
 
 
+
+
+
 const bookmarksArea = document.getElementById("bookmarks");
 
 const bookmarkTitleArea = document.getElementById("bookmarkTitleArea");
 const bookmarkUrlArea   = document.getElementById("bookmarkUrlArea");
-const addBookmarkButton = document.getElementById("addBookmarkButton");
+const saveBookmarkButton = document.getElementById("saveBookmarkButton");
 
 
 //
@@ -26,24 +29,32 @@ function saveBookmarkHandler() {
         return;
     }
 
-    bookmarkTitleArea.value = "";
-    bookmarkUrlArea.value = "";
-
     if (inputUrl.indexOf("://") == -1) {
         inputUrl = "http://" + inputUrl;
     }
+
+    if (!urlRegex.test(inputUrl)) {
+        window.alert("The URL you entered is invalid.");
+        return;
+    }
+
+    bookmarkTitleArea.value = "";
+    bookmarkUrlArea.value = "";
+
     if (editingIndex == -1) {
         bookmarks.push({title: inputTitle, url: inputUrl});
+        updateUI();
+
+        var i = bookmarksArea.childNodes.length - 1;
+        if (i != -1) bookmarksArea.childNodes[i].scrollIntoView();
     } else {
         bookmarks[editingIndex] = {title: inputTitle, url: inputUrl};
         editingIndex = -1;
+        updateUI();
     }
     
-    addBookmarkButton.innerText = "Add";
-    bookmarksArea.focus();
-
+    saveBookmarkButton.innerText = "Add";
     saveContentsToLocalStorage();
-    updateUI();
 }
 
 
@@ -53,11 +64,13 @@ function saveBookmarkHandler() {
 //
 function updateEventHandlers() {
     bookmarkTitleArea.addEventListener("keyup", function(e) { 
+        updateButtonEnabledState();
         if (e.key == "Enter") {
             bookmarkUrlArea.focus(); 
         }
     });
     bookmarkUrlArea.addEventListener("keyup", function(e) { 
+        updateButtonEnabledState();
         if (e.key == "Enter") {
             bookmarkUrlArea.blur();
             saveBookmarkHandler(); 
@@ -67,7 +80,9 @@ function updateEventHandlers() {
 
 function updateUI() {
     bookmarksArea.innerHTML = "";
-    editingIndex = -1;
+    if (editingIndex != -1) toggleEditing(editingIndex);
+    updateButtonEnabledState();
+
     for (var i = 0; i < bookmarks.length; i++) {
         const bookmark = bookmarks[i];
         const I = i;
@@ -78,10 +93,10 @@ function updateUI() {
                     toggleEditing(I);
                 },
                 function () {
-                    bookmarks.splice(I, 1);
                     if (editingIndex != -1) toggleEditing(editingIndex);
-                    saveContentsToLocalStorage();
+                    bookmarks.splice(I, 1);
                     updateUI();
+                    saveContentsToLocalStorage();
                 }
             )
         );
@@ -89,12 +104,20 @@ function updateUI() {
     bookmarksArea.style.opacity = 1;
 }
 
+function updateButtonEnabledState() {
+    var inputUrl = bookmarkUrlArea.value;
+    if (inputUrl.indexOf("://") == -1) {
+        inputUrl = "http://" + inputUrl;
+    }
+    saveBookmarkButton.disabled = !urlRegex.test(inputUrl);
+}
+
 function toggleEditing(index) {
-    var ele = document.getElementsByClassName("bookmark")[index];
+    var ele = bookmarksArea.childNodes[index];
     if (editingIndex == index) {
         editingIndex = -1;
         ele.classList.remove("highlighted");
-        addBookmarkButton.innerText = "Add";
+        saveBookmarkButton.innerText = "Add";
         bookmarkTitleArea.value = "";
         bookmarkUrlArea.value = "";
     } else {
@@ -103,17 +126,21 @@ function toggleEditing(index) {
         }
         editingIndex = index;
         ele.classList.add("highlighted");
-        addBookmarkButton.innerText = "Save";
+        saveBookmarkButton.innerText = "Save";
         bookmarkTitleArea.value = bookmarks[index].title;
         bookmarkUrlArea.value = bookmarks[index].url;
     }
+    updateButtonEnabledState();
 }
 
 function createBookmarkElement(bookmark, selectHandler, deleteHandler) {
     var newEle = document.createElement('div');
     newEle.className = "bookmark";
     newEle.innerHTML = convertBookmarkToHTML(bookmark);
-    newEle.onclick = selectHandler;
+    newEle.onclick = function(e) { 
+        if (e.target.tagName != "BUTTON" && e.target.tagName != "A") 
+            selectHandler(e);
+    };
 
     var buttonContainer = document.createElement('span');
     buttonContainer.className = "buttons";
@@ -135,6 +162,9 @@ function createBookmarkElement(bookmark, selectHandler, deleteHandler) {
 // Data handlers
 //
 const identifier = "2bkept_data"
+const urlRegex = /^(?:(?:ht|f)tp(?:s?)\:\/\/|~\/|\/)?(?:\w+:\w+@)?((?:(?:[-\w\d{1-3}]+\.)+(?:com|org|net|gov|mil|biz|info|mobi|name|aero|jobs|edu|co\.uk|ac\.uk|it|fr|tv|museum|asia|local|travel|[a-z]{2}))|((\b25[0-5]\b|\b[2][0-4][0-9]\b|\b[0-1]?[0-9]?[0-9]\b)(\.(\b25[0-5]\b|\b[2][0-4][0-9]\b|\b[0-1]?[0-9]?[0-9]\b)){3}))(?::[\d]{1,5})?(?:(?:(?:\/(?:[-\w~!$+|.,=]|%[a-f\d]{2})+)+|\/)+|\?|#)?(?:(?:\?(?:[-\w~!$+|.,*:]|%[a-f\d{2}])+=?(?:[-\w~!$+|.,*:=]|%[a-f\d]{2})*)(?:&(?:[-\w~!$+|.,*:]|%[a-f\d{2}])+=?(?:[-\w~!$+|.,*:=]|%[a-f\d]{2})*)*)*(?:#(?:[-\w~!$ |\/.,*:;=]|%[a-f\d]{2})*)?$/i;
+
+
 function retrieveContentsFromLocalStorage() {
     var result = localStorage.getItem(identifier);
     if (result === null || result === undefined) {
@@ -163,14 +193,15 @@ function escapeHtml(unsafe) {
          .replace(/'/g, "&#039;");
 }
 
-function convertBookmarkToHTML(bookmark) {
-    var urlRegex = /^(?:(?:ht|f)tp(?:s?)\:\/\/|~\/|\/)?(?:\w+:\w+@)?((?:(?:[-\w\d{1-3}]+\.)+(?:com|org|net|gov|mil|biz|info|mobi|name|aero|jobs|edu|co\.uk|ac\.uk|it|fr|tv|museum|asia|local|travel|[a-z]{2}))|((\b25[0-5]\b|\b[2][0-4][0-9]\b|\b[0-1]?[0-9]?[0-9]\b)(\.(\b25[0-5]\b|\b[2][0-4][0-9]\b|\b[0-1]?[0-9]?[0-9]\b)){3}))(?::[\d]{1,5})?(?:(?:(?:\/(?:[-\w~!$+|.,=]|%[a-f\d]{2})+)+|\/)+|\?|#)?(?:(?:\?(?:[-\w~!$+|.,*:]|%[a-f\d{2}])+=?(?:[-\w~!$+|.,*:=]|%[a-f\d]{2})*)(?:&(?:[-\w~!$+|.,*:]|%[a-f\d{2}])+=?(?:[-\w~!$+|.,*:=]|%[a-f\d]{2})*)*)*(?:#(?:[-\w~!$ |\/.,*:;=]|%[a-f\d]{2})*)?$/i;
+function convertBookmarkToHTML(bookmark) {    
+    var titleExists = bookmark.title !== undefined && bookmark.title !== null && bookmark.title !== "";
+    var titleTag = titleExists ? "<span>" + escapeHtml(bookmark.title) + "</span><br />" : "";
     var urlTag = bookmark.url.replace(urlRegex, function(url) {
         return '<a href="' + url + '">' + url + '</a>';
     });
-    return escapeHtml(bookmark.title) + "<br />" + urlTag;
-}
 
+    return titleTag + urlTag;
+}
 
 
 //

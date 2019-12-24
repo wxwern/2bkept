@@ -3,7 +3,7 @@
     :root {
         --font: 400 15px "Verdana", sans-serif;
         --top-bar-height: 50px;
-        --bottom-bar-height: 100px;
+        --bottom-bar-height: 90px;
         --focus-blue: #0077ff;
 
         --bar-color: #fff8;
@@ -182,7 +182,7 @@ body, html {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 90px;
+    height: var(--bottom-bar-height);
     position: fixed;
     z-index: 10;
     display: flex;
@@ -206,6 +206,7 @@ body, html {
     -webkit-appearance: none;
     appearance: none;
     word-wrap: break-word;
+    margin-top: 2px;
     font: var(--font);
     font-size: 13px;
     border: 0;
@@ -227,8 +228,9 @@ body, html {
     color: var(--font-color);
     background-color: var(--secondary-background-color);
     box-shadow: var(--light-shadow);
-    transition: box-shadow 200ms ease-in-out;
+    transition: all 200ms ease-in-out;
 }
+
 @media (hover) {
     #bottomBar textarea:hover, #bottomBar textarea:active, #bottomBar button:hover, #bottomBar button:active {
         box-shadow: var(--dark-shadow);
@@ -237,7 +239,13 @@ body, html {
 #bottomBar button:active {
     opacity: 0.5;
     transition: opacity 100ms ease-out;
-} 
+}
+#bottomBar button:disabled {
+    color: #777;
+    opacity: 1;
+    background-color: #0000;
+    box-shadow: none;
+}
 
 @media print {
     #bottomBar {

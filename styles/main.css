@@ -102,6 +102,9 @@ body, html {
 }
 
 
+
+
+
 .bookmark {
     margin: 5px;
     margin-left: 10px;
@@ -139,12 +142,14 @@ body, html {
     display: flex;
 }
 
-.bookmark:hover {
-    box-shadow: var(--very-dark-shadow);
-}
-.bookmark:hover .buttons {
-    opacity: 1;
-    visibility: visible;
+@media (hover) {
+    .bookmark:hover {
+        box-shadow: var(--very-dark-shadow);
+    }
+    .bookmark:hover .buttons {
+        opacity: 1;
+        visibility: visible;
+    }
 }
 
 .bookmark.highlighted {
@@ -157,6 +162,7 @@ body, html {
 
 .bookmark button {
     color: var(--focus-blue);
+    -webkit-appearance: none;
     appearance: none;
     background: #0000;
     position: relative;
@@ -166,6 +172,9 @@ body, html {
 .bookmark button.delete {
     color: red;
 }
+
+
+
 
 
 
@@ -194,11 +203,13 @@ body, html {
 }
 #bottomBar div input {
     padding: 8px;
+    -webkit-appearance: none;
     appearance: none;
     word-wrap: break-word;
     font: var(--font);
     font-size: 13px;
     border: 0;
+    border-radius: 0;
     color: var(--font-color);
     box-shadow: var(--light-shadow);
     background-color: var(--secondary-background-color);
@@ -208,16 +219,20 @@ body, html {
     margin-left: 5px;
     margin-right: auto;
     width: 64px;
+    -webkit-appearance: none;
     appearance: none;
     border: 0;
+    border-radius: 0;
     font: var(--font);
     color: var(--font-color);
     background-color: var(--secondary-background-color);
     box-shadow: var(--light-shadow);
     transition: box-shadow 200ms ease-in-out;
 }
-#bottomBar textarea:hover, #bottomBar textarea:active, #bottomBar button:hover, #bottomBar button:active {
-    box-shadow: var(--dark-shadow);
+@media (hover) {
+    #bottomBar textarea:hover, #bottomBar textarea:active, #bottomBar button:hover, #bottomBar button:active {
+        box-shadow: var(--dark-shadow);
+    }
 }
 #bottomBar button:active {
     opacity: 0.5;

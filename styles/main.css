@@ -4,7 +4,8 @@
         --font: 400 15px "Verdana", sans-serif;
         --top-bar-height: 50px;
         --bottom-bar-height: 100px;
-        
+        --focus-blue: #0077ff;
+
         --bar-color: #fff8;
         --font-color: #222;
         --background-color: #fff;
@@ -59,6 +60,14 @@ body, html {
     margin: auto;
     font-size: 20px;
 }
+#navigationBar a {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    padding: 15px;
+}
 
 
 
@@ -87,19 +96,23 @@ body, html {
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
+    justify-content:left;
+    opacity: 0;
+    transition: opacity 300ms ease-in-out;
 }
 
 
 .bookmark {
-    margin: 10px;
+    margin: 5px;
     margin-left: 10px;
-    margin-right: auto;
-    padding: 20px;
+    margin-right: 10px;
+    padding: 16px 16px 8px;
     width: calc(100% - 20px);
-    min-height: 100px;
+    min-height: 80px;
     box-sizing: border-box;
     box-shadow: var(--dark-shadow);
     background-color: var(--secondary-background-color);
+    border: 1px solid #0000;
     overflow-wrap: break-word;
     word-wrap: break-word;
     transition: all 200ms ease-in-out;
@@ -107,38 +120,51 @@ body, html {
 @media screen and (min-width: 512px) and (max-width: 767px) {
     .bookmark {
         margin-left: 20px;
-        margin-right: auto;
+        margin-right: 20px;
         width: calc(50% - 40px);
     }
 }
 @media screen and (min-width: 768px) {
     .bookmark {
         margin-left: 30px;
-        margin-right: auto;
+        margin-right: 30px;
         width: calc(33.3333% - 60px);
     }
 }
-.bookmark .delete {
-    color: red;
-    appearance: none;
-    background: var(--secondary-background-color);
-    position: relative;
-    font-size: 12px;
+.bookmark .buttons {
     margin: 0px;
-    margin-left: auto;
-    border: 0;
-    display: block;
     opacity: 0;
     visibility: hidden;
     transition: all 200ms ease-in-out;
+    display: flex;
 }
 
 .bookmark:hover {
     box-shadow: var(--very-dark-shadow);
 }
-.bookmark:hover .delete {
+.bookmark:hover .buttons {
     opacity: 1;
     visibility: visible;
+}
+
+.bookmark.highlighted {
+    border: 1px solid var(--focus-blue);
+}
+.bookmark.highlighted .buttons {
+    opacity: 1;
+    visibility: visible;
+}
+
+.bookmark button {
+    color: var(--focus-blue);
+    appearance: none;
+    background: #0000;
+    position: relative;
+    font-size: 12px;
+    border: 0;
+}
+.bookmark button.delete {
+    color: red;
 }
 
 
@@ -147,7 +173,7 @@ body, html {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 100px;
+    height: 90px;
     position: fixed;
     z-index: 10;
     display: flex;
@@ -155,29 +181,35 @@ body, html {
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
 }
-#bottomBar textarea {
-    margin: 20px;
+#bottomBar div {
+    margin: 10px;
     margin-left: auto;
-    margin-right: 8px;
-    width: calc(100% - 128px);
+    margin-right: 5px;
+    width: calc(100% - 100px);
     max-width: 768px;
-    padding: 8px;
     display: block;
-    font: var(--font);
-    word-wrap: break-word;
-    appearance: none;
-    border: 0;
-    background-color: var(--secondary-background-color);
-    box-shadow: var(--light-shadow);
     transition: box-shadow 200ms ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+#bottomBar div input {
+    padding: 8px;
+    appearance: none;
+    word-wrap: break-word;
+    font: var(--font);
+    font-size: 13px;
+    border: 0;
+    color: var(--font-color);
+    box-shadow: var(--light-shadow);
+    background-color: var(--secondary-background-color);
 }
 #bottomBar button {
-    margin: 20px;
-    margin-left: 8px;
+    margin: 10px;
+    margin-left: 5px;
     margin-right: auto;
     width: 64px;
     appearance: none;
-    border: 0
+    border: 0;
     font: var(--font);
     color: var(--font-color);
     background-color: var(--secondary-background-color);

@@ -97,7 +97,7 @@ body, html {
     display: flex;
     flex-wrap: wrap;
     justify-content:left;
-    opacity: 0;
+    opacity: 1;
     transition: opacity 300ms ease-in-out;
 }
 

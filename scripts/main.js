@@ -162,7 +162,7 @@ function createBookmarkElement(bookmark, selectHandler, deleteHandler) {
 // Data handlers
 //
 const identifier = "2bkept_data";
-const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/g;
+const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/i;
 
 
 function retrieveContentsFromLocalStorage() {

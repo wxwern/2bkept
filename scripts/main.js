@@ -197,7 +197,7 @@ function convertBookmarkToHTML(bookmark) {
     var titleExists = bookmark.title !== undefined && bookmark.title !== null && bookmark.title !== "";
     var titleTag = titleExists ? "<span>" + escapeHtml(bookmark.title) + "</span><br />" : "";
     var urlTag = bookmark.url.replace(urlRegex, function(url) {
-        return '<a href="' + url + '">' + url + '</a>';
+        return '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + url + '</a>';
     });
 
     return titleTag + urlTag;

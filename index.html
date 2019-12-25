@@ -17,11 +17,14 @@
             </div>
         </div>
         <div id="bottomBar">
-            <div>
-            <input type="text" id="bookmarkTitleArea" type="text" placeholder="Bookmark Title"></textarea>
-            <input type="url" id="bookmarkUrlArea" type="text" placeholder="Bookmark URL"></textarea>
+            <div class="interactionContainer">
+                <div class="textFieldContainer">
+                    <input type="text" id="bookmarkTitleArea" type="text" placeholder="Bookmark Title"></textarea>
+                    <input type="url" id="bookmarkUrlArea" type="text" placeholder="Bookmark URL*"></textarea>
+                </div>
+                <button id="saveBookmarkButton" onclick="saveBookmarkHandler()">Add</button>
             </div>
-            <button id="saveBookmarkButton" onclick="saveBookmarkHandler()">Add</button>
+            <span class="message">*Required</span>
         </div>
         <script src="scripts/main.js"></script>
     </body>

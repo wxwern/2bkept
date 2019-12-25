@@ -12,10 +12,13 @@ var editingIndex = -1;
 
 
 const bookmarksArea = document.getElementById("bookmarks");
+const bottomBar = document.getElementById("bottomBar")
 
 const bookmarkTitleArea = document.getElementById("bookmarkTitleArea");
 const bookmarkUrlArea   = document.getElementById("bookmarkUrlArea");
 const saveBookmarkButton = document.getElementById("saveBookmarkButton");
+const saveBookmarkHint = bottomBar.getElementsByClassName("message")[0];
+
 
 
 //
@@ -26,6 +29,8 @@ function saveBookmarkHandler() {
     var inputUrl = bookmarkUrlArea.value;
 
     if (inputTitle == "" && inputUrl == "") {
+        updateSaveBookmarkHint();
+        saveBookmarkHint.classList.add("error");
         return;
     }
 
@@ -34,7 +39,8 @@ function saveBookmarkHandler() {
     }
 
     if (!urlRegex.test(inputUrl)) {
-        window.alert("The URL you entered is invalid.");
+        updateSaveBookmarkHint();
+        saveBookmarkHint.classList.add("error");
         return;
     }
 
@@ -65,12 +71,14 @@ function saveBookmarkHandler() {
 function updateEventHandlers() {
     bookmarkTitleArea.addEventListener("keyup", function(e) { 
         updateButtonEnabledState();
+        updateSaveBookmarkHint();
         if (e.key == "Enter") {
             bookmarkUrlArea.focus(); 
         }
     });
     bookmarkUrlArea.addEventListener("keyup", function(e) { 
         updateButtonEnabledState();
+        updateSaveBookmarkHint();
         if (e.key == "Enter") {
             bookmarkUrlArea.blur();
             saveBookmarkHandler(); 
@@ -82,6 +90,7 @@ function updateUI() {
     bookmarksArea.innerHTML = "";
     if (editingIndex != -1) toggleEditing(editingIndex);
     updateButtonEnabledState();
+    updateSaveBookmarkHint();
 
     for (var i = 0; i < bookmarks.length; i++) {
         const bookmark = bookmarks[i];
@@ -109,7 +118,34 @@ function updateButtonEnabledState() {
     if (inputUrl.indexOf("://") == -1) {
         inputUrl = "http://" + inputUrl;
     }
-    saveBookmarkButton.disabled = !urlRegex.test(inputUrl);
+    if (urlRegex.test(inputUrl)) {
+        saveBookmarkButton.classList.remove("disabled");
+    } else {
+        saveBookmarkButton.classList.add("disabled");
+    }
+}
+
+function updateSaveBookmarkHint() {
+    saveBookmarkHint.classList.remove("error");
+    saveBookmarkHint.innerText = "*Required";
+
+    var inputUrl = bookmarkUrlArea.value;
+    if (inputUrl === null || inputUrl == "") {
+        return;
+    }
+
+    if (inputUrl.indexOf("://") == -1) inputUrl = "http://" + inputUrl;
+
+    if (!urlRegex.test(inputUrl)) {
+        saveBookmarkHint.classList.add("error");
+        saveBookmarkHint.innerText = "The URL you entered is invalid.";
+    } else {
+        if (editingIndex == -1) {
+            saveBookmarkHint.innerText = "Press 'Add' to save the bookmark.";
+        } else {
+            saveBookmarkHint.innerText = "Press 'Save' to update the bookmark.";
+        }
+    }
 }
 
 function toggleEditing(index) {
@@ -131,6 +167,7 @@ function toggleEditing(index) {
         bookmarkUrlArea.value = bookmarks[index].url;
     }
     updateButtonEnabledState();
+    updateSaveBookmarkHint();
 }
 
 function createBookmarkElement(bookmark, selectHandler, deleteHandler) {

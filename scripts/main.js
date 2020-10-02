@@ -63,6 +63,69 @@ function saveBookmarkHandler() {
     saveContentsToLocalStorage();
 }
 
+function copyLinkHandler() {
+    let textarea = document.createElement("textarea");
+
+    // Place in top-left corner of screen regardless of scroll position.
+    textarea.style.position = 'fixed';
+    textarea.style.top = 0;
+    textarea.style.left = 0;
+
+    // Ensure it has a small width and height. Setting to 1px / 1em
+    // doesn't work as this gives a negative w/h on some browsers.
+    textarea.style.width = '1px';
+    textarea.style.height = '1px';
+
+    // We don't need padding, reducing the size if it does flash render.
+    textarea.style.padding = 0;
+
+    // Clean up any borders.
+    textarea.style.border = 'none';
+    textarea.style.outline = 'none';
+    textarea.style.boxShadow = 'none';
+
+    // Avoid flash of white box if rendered for any reason.
+    textarea.style.background = 'transparent';
+    document.body.appendChild(textarea);
+    console.log("The textarea now exists :)");
+
+    textarea.value = document.querySelector("#link").innerHTML;
+    textarea.select();
+
+    try {
+        var status = document.execCommand('copy');
+        if (!status) {
+            console.error("Cannot copy text");
+            toast("Failed to copy text", 1000, "failure");
+        } else {
+            console.log("The text is now on the clipboard");
+            toast("Copied!", 1000, "success");
+        }
+    } catch (err) {
+        console.log('Unable to copy.');
+    }
+
+    textarea.remove();
+}
+
+function exportLinkHandler() {
+    let enc = btoa(JSON.stringify(bookmarks));
+
+    let search = window.location.search;
+    let orig = window.location.toString();
+
+    let link = orig.substr(0, orig.length-search.length) + "?bookmarks=" + enc;
+
+    let modal = document.querySelector(".modal");
+    modal.querySelector("#link").innerHTML = link;
+    modal.classList.toggle("show");
+}
+
+function modalCloseHandler(e) {
+    if (!e.target.matches(".modal") && !e.target.matches(".close")) return;
+    let modal = document.querySelector(".modal");
+    modal.classList.toggle("show");
+}
 
 
 //
@@ -192,6 +255,17 @@ function createBookmarkElement(bookmark, selectHandler, deleteHandler) {
     return newEle;
 }
 
+function toast(text, duration, state) {
+    let t = document.querySelector(".toast");
+    t.innerHTML = text;
+    t.classList.toggle("show");
+    t.classList.toggle(state);
+    setTimeout(() => {
+        t.classList.toggle("show");
+        t.classList.toggle(state);
+    }, duration);
+}
+
 
 
 
@@ -201,6 +275,23 @@ function createBookmarkElement(bookmark, selectHandler, deleteHandler) {
 const identifier = "2bkept_data";
 const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/i;
 
+
+function retrieveContentsFromURL() {
+    let result = new URLSearchParams(window.location.search).get('bookmarks');
+    if (result === null || result === undefined) {
+        console.log("no contents retrieved from URL.");
+        return false;
+    } else {
+        try {
+            bookmarks = JSON.parse(atob(result));
+            console.log("successfully retrieved contents from URL.");
+            return true;
+        } catch (e) {
+            console.log("couldn't retrieve contents. " + e);
+            return false;
+        }
+    }
+}
 
 function retrieveContentsFromLocalStorage() {
     var result = localStorage.getItem(identifier);
@@ -244,7 +335,8 @@ function convertBookmarkToHTML(bookmark) {
 //
 // Auto-run
 //
-retrieveContentsFromLocalStorage();
+if (!retrieveContentsFromURL())
+    retrieveContentsFromLocalStorage();
 updateEventHandlers();
 updateUI();
 

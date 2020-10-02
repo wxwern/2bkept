@@ -8,6 +8,7 @@
     <body>
         <div id="navigationBar">
             <span><b>2bkept</b></span>
+            <button id="exportLinkButton" onclick="exportLinkHandler()">Export Link</button>
         </div>
         <div id="bookmarkContainer"> 
             <div id="bookmarks">
@@ -27,6 +28,16 @@
             <span class="message">*Required</span>
         </div>
         <script src="scripts/main.js"></script>
+
+        <div class="modal" onclick="modalCloseHandler(event)">
+            <div class="content">
+                <h3>Your generated link is:</h3>
+                <span class="close">&times;</span>
+                <pre id="link"></pre>
+                <button id="copyLink" onclick="copyLinkHandler()">Copy to clipboard</button>
+            </div>
+        </div>
+        <span class="toast"></span>
     </body>
 </html>
 

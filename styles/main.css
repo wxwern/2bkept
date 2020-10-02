@@ -283,3 +283,113 @@ body, html {
 a, a:hover, a:active, a:visited {
     color: #0077ff;
 }
+
+
+
+
+
+/* modal */
+.modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    background-color: #fff7;
+    width: 100%;
+    height: 100%;
+
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s linear .25s, opacity .2s ease-in;
+}
+
+.modal.show {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s linear 0s, opacity .2s ease-in;
+}
+
+.modal .close {
+    position: absolute;
+    top: .4rem;
+    right: .4rem;
+    padding: .4rem;
+}
+
+.modal .close:hover {
+    box-shadow: var(--light-shadow);
+    cursor: pointer;
+}
+
+.modal .content {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+
+    background-color: var(--focus-blue);
+    box-shadow: var(--dark-shadow);
+    width: 50%;
+    max-width: 100rem;
+    height: 50%;
+    border-radius: .4rem;
+    color: var(--background-color);
+
+    padding: .8rem;
+    display: flex;
+    flex-flow: column;
+}
+
+.modal .content h3 {
+    margin: .2rem auto;
+}
+
+.modal .content pre {
+    background-color: var(--background-color);
+    color: var(--font-color);
+
+    padding: .8rem;
+    border-radius: .4rem;
+
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    overflow-y: scroll;
+}
+
+/* toast */
+.toast {
+    position: absolute;
+    bottom: .8rem;
+    z-index: 9001;
+    left: 50%;
+    transform: translate(-50%);
+
+    width: auto;
+    height: auto;
+    padding: .4rem .6rem;
+    border-radius: .2rem;
+
+    color: #fff;
+
+    visibility: hidden;
+    opacity: 0;
+
+    transition: visibility 0s linear .25s, opacity .2s ease-in, background-color 0s linear .25s;
+}
+
+.toast.show {
+    visibility: visible;
+    opacity: 1;
+
+    transition: visibility 0s linear 0s, opacity .2s ease-in, background-color 0s linear 0s;
+}
+
+.toast.success {
+    background-color: green;
+}
+
+.toast.failure {
+    background-color: red;
+}

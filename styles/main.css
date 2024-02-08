@@ -118,6 +118,7 @@ body, html {
     border: 1px solid #0000;
     overflow-wrap: break-word;
     word-wrap: break-word;
+    cursor: pointer;
     transition: all 200ms ease-in-out;
 }
 @media screen and (min-width: 512px) and (max-width: 767px) {
@@ -168,6 +169,7 @@ body, html {
     position: relative;
     font-size: 12px;
     border: 0;
+    cursor: pointer;
 }
 .bookmark button.delete {
     color: red;
@@ -251,6 +253,7 @@ body, html {
     color: var(--font-color);
     background-color: var(--secondary-background-color);
     box-shadow: var(--light-shadow);
+    cursor: pointer;
     transition: all 200ms ease-in-out;
 }
 
@@ -268,6 +271,7 @@ body, html {
     opacity: 1;
     background-color: #0000;
     box-shadow: none;
+    cursor: not-allowed;
 }
 
 @media print {
